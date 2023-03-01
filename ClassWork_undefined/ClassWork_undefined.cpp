@@ -1,13 +1,16 @@
 #include <iostream>
+#include <vector>
+#include <string>
 
-class Strategy
+class SortStrategy
 {
 private:
 public:
 	virtual void sort(int* arr, int size) = 0;
+	virtual void sort(std::vector<std::string>) = 0;
 };
 
-class BubbleSort : public Strategy
+class BubbleSort : public SortStrategy
 {
 private:
 public:
@@ -26,8 +29,12 @@ public:
 			}
 		}
 	}
+	void sort(std::vector<std::string>) override
+	{
+		std::cout << "nothing\n";
+	}
 };
-class QuickSort : public Strategy
+class QuickSort : public SortStrategy
 {
 private:
 public:
@@ -55,6 +62,34 @@ public:
 	if (size > left) 
 		sort(arr + left, size - left); 
 	}
+	void sort(std::vector<std::string>) override
+	{
+		std::cout << "nothing\n";
+	}
+};
+
+class SortedArray
+{
+	std::vector<std::string> vector;
+	SortStrategy* sortstrategy;
+public:
+	void SetSortStrategy(SortStrategy* sortstrategy)
+	{
+		this->sortstrategy = sortstrategy;
+	}
+	void Add(std::string name)
+	{
+		vector.push_back(name);
+	}
+	void Sort()
+	{
+		sortstrategy->sort(vector);
+		for (std::string name : vector)
+		{
+			std::cout << " " + name << std::endl;
+		}
+		std::cout << std::endl;
+	}
 };
 
 int main()
@@ -81,4 +116,20 @@ int main()
 		std::cout << test2[i] << ", ";
 	}
 	std::cout << '\n';
+	SortedArray ar;
+	ar.Add("Strategy");
+	ar.Add("Observer");
+	ar.Add("Iterator");
+	ar.Add("Mediator");
+	ar.Add("Memento");
+	ar.Add("Interpreter");
+	ar.Add("State");
+	ar.Add("Command");
+
+	BubbleSort bubble;
+	ar.SetSortStrategy(&bubble);
+	ar.Sort();
+
+	system("pause");
+	return 0;
 }
